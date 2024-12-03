@@ -15,6 +15,6 @@ public class Customer {
     private String name;
     private String contactDetails;
 
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Rental> rentalHistory;
 }
