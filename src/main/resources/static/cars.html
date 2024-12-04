@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Cars</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<h1>Manage Cars</h1>
+<div>
+    <h2>All Cars</h2>
+    <ul id="car-list"></ul>
+</div>
+<div>
+    <h2>Add New Car</h2>
+    <form id="add-car-form">
+        <input type="text" id="brand" placeholder="Brand" required />
+        <input type="text" id="model" placeholder="Model" required />
+        <input type="number" id="year" placeholder="Year" required />
+        <input type="text" id="color" placeholder="Color" required />
+        <input type="number" id="mileage" placeholder="Mileage" required />
+        <button type="submit">Add Car</button>
+    </form>
+</div>
+<script src="js/cars.js"></script>
+</body>
+</html>

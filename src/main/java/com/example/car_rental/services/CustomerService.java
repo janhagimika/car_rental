@@ -17,9 +17,11 @@ public class CustomerService {
         return customerRepository.findAll();
     }
 
-    public Customer getCustomerById(Long id) {
-        return customerRepository.findById(id).orElseThrow(() -> new RuntimeException("Customer not found!"));
+    public Customer getCustomerAndRentalHistory(Long id) {
+        return customerRepository.findByIdWithRentals(id)
+                .orElseThrow(() -> new RuntimeException("Customer not found"));
     }
+
 
     public Customer saveCustomer(Customer customer) {
         return customerRepository.save(customer);

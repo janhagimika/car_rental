@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Customers</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<h1>Manage Customers</h1>
+<div>
+    <h2>All Customers</h2>
+    <ul id="customer-list"></ul>
+</div>
+<div>
+    <h2>Add New Customer</h2>
+    <form id="add-customer-form">
+        <input type="text" id="customer-name" placeholder="Name" required />
+        <input type="text" id="customer-contact" placeholder="Contact Details" required />
+        <button type="submit">Add Customer</button>
+    </form>
+</div>
+<div>
+    <h2>Create Rental for a Customer</h2>
+    <form id="create-rental-form">
+        <label for="customer-id">Select Customer:</label>
+        <select id="customer-id" required></select>
+        <label for="car-id">Select Car:</label>
+        <select id="car-id" required></select>
+        <label for="rental-date">Rental Date:</label>
+        <input type="date" id="rental-date" required />
+        <button type="submit">Create Rental</button>
+    </form>
+</div>
+<script src="js/customers.js"></script>
+</body>
+</html>
