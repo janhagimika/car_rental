@@ -3,6 +3,7 @@ package com.example.car_rental.controllers;
 import com.example.car_rental.models.Car;
 import com.example.car_rental.services.CarService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,11 +20,11 @@ public class CarController {
         return carService.getAllCars();
     }
 
-    @GetMapping("/{id}")
-    public Car getCarById(@PathVariable Long id) {
-        return carService.getCarById(id);
+    @GetMapping("/available")
+    public ResponseEntity<List<Car>> getAvailableCars() {
+        List<Car> availableCars = carService.getAvailableCars();
+        return ResponseEntity.ok(availableCars);
     }
-
     @PostMapping
     public Car saveCar(@RequestBody Car car) {
         return carService.saveCar(car);

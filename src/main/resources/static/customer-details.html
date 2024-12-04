@@ -3,16 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Rental History</title>
     <link rel="stylesheet" href="css/styles.css">
+    <title>Customer Rental History</title>
 </head>
 <body>
-<h1>Rental History</h1>
-<button onclick="goToMainPage()">Back to Main Page</button>
-<button onclick="goToCustomersPage()">Back to Customers</button>
-<ul id="rental-history"></ul>
+<div class="container">
+    <h1>Customer Details</h1>
+    <div id="customer-info">
+        <h2 id="customer-name"></h2>
+        <p id="customer-email"></p>
+        <p id="customer-phone"></p>
+        <p id="customer-address"></p>
+    </div>
 
-<script src="js/navigation.js"></script>
+    <h2>Add Rental</h2>
+    <form id="add-rental-form">
+        <label for="car">Select Car:</label>
+        <select id="car" name="car" required></select>
+        <br>
+        <label for="rental-date">Rental Date:</label>
+        <input type="date" id="rental-date" name="rentalDate" required>
+        <br>
+        <label for="return-date">Return Date:</label>
+        <input type="date" id="return-date" name="returnDate" required>
+        <br>
+        <button type="submit">Add Rental</button>
+    </form>
+
+    <h2>Rental History</h2>
+    <table id="rental-history">
+        <thead>
+        <tr>
+            <th>Car</th>
+            <th>Rental Date</th>
+            <th>Return Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <div class="navigation">
+        <button onclick="navigateTo('index.html')">Back to Main Page</button>
+        <button onclick="navigateTo('customers.html')">Back to Customers</button>
+    </div>
+</div>
+
 <script src="js/customer-details.js"></script>
+<script src="js/navigation.js"></script>
 </body>
 </html>

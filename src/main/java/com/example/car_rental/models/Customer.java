@@ -15,9 +15,13 @@ public class Customer {
     private Long id;
 
     private String firstname;
+
     private String surname;
+
     private String address;
+
     private String emailAddress;
+
     private String phoneNumber;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

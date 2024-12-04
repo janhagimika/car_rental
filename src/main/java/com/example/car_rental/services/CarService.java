@@ -2,6 +2,7 @@ package com.example.car_rental.services;
 
 import com.example.car_rental.models.Car;
 import com.example.car_rental.repositories.CarRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +18,6 @@ public class CarService {
         return carRepository.findAll();
     }
 
-    public Car getCarById(Long id) {
-        return carRepository.findById(id).orElseThrow(() -> new RuntimeException("Car not found!"));
-    }
-
     public Car saveCar(Car car) {
         return carRepository.save(car);
     }
@@ -29,8 +26,12 @@ public class CarService {
         carRepository.deleteById(id);
     }
 
+    public List<Car> getAvailableCars() {
+        return carRepository.findByIsAvailableTrue();
+    }
+    @Transactional
     public Car updateCar(Long id, Car updatedCar) {
-        Car car = getCarById(id);
+        Car car = carRepository.findById(id).orElseThrow(() -> new RuntimeException("Car not found!"));
         car.setBrand(updatedCar.getBrand());
         car.setModel(updatedCar.getModel());
         car.setYearOfManufacture(updatedCar.getYearOfManufacture());

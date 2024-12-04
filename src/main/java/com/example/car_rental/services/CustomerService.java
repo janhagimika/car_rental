@@ -1,7 +1,9 @@
 package com.example.car_rental.services;
 
+import com.example.car_rental.models.Car;
 import com.example.car_rental.models.Customer;
 import com.example.car_rental.repositories.CustomerRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,12 +24,8 @@ public class CustomerService {
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
     }
 
-
     public Customer saveCustomer(Customer customer) {
         return customerRepository.save(customer);
     }
 
-    public void deleteCustomer(Long id) {
-        customerRepository.deleteById(id);
-    }
 }

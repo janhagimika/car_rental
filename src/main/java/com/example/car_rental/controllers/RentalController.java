@@ -3,10 +3,8 @@ package com.example.car_rental.controllers;
 import com.example.car_rental.models.Rental;
 import com.example.car_rental.services.RentalService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/rentals")
@@ -16,7 +14,14 @@ public class RentalController {
     private RentalService rentalService;
 
     @PostMapping
-    public Rental saveRental(@RequestBody Rental rental) {
-        return rentalService.saveRental(rental);
+    public ResponseEntity<Rental> createRental(@RequestBody Rental rental) {
+        Rental savedRental = rentalService.createRental(rental);
+        return ResponseEntity.ok(savedRental);
+    }
+
+    @PutMapping("/{id}/return")
+    public ResponseEntity<Rental> returnRental(@PathVariable Long id, @RequestBody Rental updatedRentalDetails) {
+        Rental updatedRental = rentalService.completeRental(id, updatedRentalDetails);
+        return ResponseEntity.ok(updatedRental);
     }
 }
