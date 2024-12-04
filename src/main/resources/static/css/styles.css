@@ -3,43 +3,46 @@ body {
     line-height: 1.6;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
 }
 
-h1, h2 {
-    color: #333;
+h1 {
+    background: #333;
+    color: #fff;
+    padding: 1rem;
+    text-align: center;
 }
 
 nav {
-    margin-bottom: 20px;
-    padding: 10px;
-    background-color: #333;
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0;
 }
 
 nav a {
-    color: #fff;
+    margin: 0 1rem;
     text-decoration: none;
-    margin-right: 10px;
+    color: #007BFF;
 }
 
-nav a:hover {
-    text-decoration: underline;
-}
-
-form input {
-    margin: 5px 0;
-    padding: 8px;
-    width: 200px;
-}
-
-form button {
-    padding: 8px 15px;
-    background-color: #333;
+button {
+    margin: 1rem;
+    padding: 0.5rem 1rem;
+    background: #007BFF;
     color: #fff;
     border: none;
     cursor: pointer;
 }
 
-form button:hover {
-    background-color: #555;
+button:hover {
+    background: #0056b3;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    padding: 0.5rem;
+    border-bottom: 1px solid #ccc;
 }
