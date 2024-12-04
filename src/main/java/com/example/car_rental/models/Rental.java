@@ -1,8 +1,7 @@
 package com.example.car_rental.models;
 
-import com.example.car_rental.settings.LocalDateToLocalDateTimeDeserializer;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -22,12 +21,13 @@ public class Rental {
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
+    @JsonBackReference
     private Customer customer;
 
-    @JsonDeserialize(using = LocalDateToLocalDateTimeDeserializer.class)
     private LocalDateTime rentalDate;
 
-    @JsonDeserialize(using = LocalDateToLocalDateTimeDeserializer.class)
+    private LocalDateTime plannedReturnDate;
+
     private LocalDateTime returnDate;
 
     @Enumerated(EnumType.STRING)

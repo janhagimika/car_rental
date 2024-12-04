@@ -47,36 +47,31 @@ public class RentalService {
 
 
     @Transactional
-    public Rental completeRental(Long rentalId, Rental rentalDetails) {
-
-        if (rentalDetails.getCar() == null || rentalDetails.getCar().getId() == null) {
-            throw new IllegalArgumentException("Car information is missing");
-        }
-        if (rentalDetails.getCustomer() == null || rentalDetails.getCustomer().getId() == null) {
-            throw new IllegalArgumentException("Customer information is missing");
-        }
-
+    public Rental completeRental(Long rentalId, ReturnCondition conditionOnReturn) {
         Rental rental = rentalRepository.findById(rentalId)
                 .orElseThrow(() -> new RuntimeException("Rental not found"));
 
-        rental.setStatus(RentalStatus.COMPLETED);
-        rental.setConditionOnReturn(rentalDetails.getConditionOnReturn());
-        rental.setReturnDate(LocalDateTime.now());
-
-        Car car = rental.getCar();
-
-        // Update car availability based on return condition
-        if (rentalDetails.getConditionOnReturn() == ReturnCondition.DAMAGED ||
-                rentalDetails.getConditionOnReturn() == ReturnCondition.UNUSABLE) {
-            car.setAvailable(false);
-        } else {
-            car.setAvailable(true);
+        if (rental.getCar() == null || rental.getCar().getId() == null) {
+            throw new IllegalArgumentException("Car information is missing");
+        }
+        if (rental.getCustomer() == null || rental.getCustomer().getId() == null) {
+            throw new IllegalArgumentException("Customer information is missing");
         }
 
-        carRepository.save(car);
-        rentalRepository.save(rental);
+        // Update rental details
+        rental.setStatus(RentalStatus.COMPLETED); // Mark rental as completed
+        rental.setConditionOnReturn(ReturnCondition.valueOf(conditionOnReturn.name())); // Save the return condition as a string
+        rental.setReturnDate(LocalDateTime.now()); // Set actual return date
 
-        return rental;
+        // Mark the car as available (or not if unusable)
+        Car car = rental.getCar();
+        if(conditionOnReturn == ReturnCondition.UNUSABLE) {
+            car.setAvailable(false); // If unusable, car is no longer available
+        } else {
+            car.setAvailable(true); // Otherwise, mark the car as available
+        }
+        carRepository.save(car); // Save car state
+        return rentalRepository.save(rental); // Save rental
     }
 
 

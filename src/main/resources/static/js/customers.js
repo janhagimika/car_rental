@@ -34,3 +34,36 @@ fetch("http://localhost:8080/api/customers")
     .then((response) => response.json())
     .then((customers) => displayCustomers(customers))
     .catch((error) => console.error("Error fetching customers:", error));
+
+// Function to handle the Add Customer form submission
+document.getElementById("add-customer-form").addEventListener("submit", (event) => {
+    event.preventDefault(); // Prevent the default form submission
+
+    // Gather form data
+    const formData = new FormData(event.target);
+    const customerData = Object.fromEntries(formData.entries());
+
+    // Send POST request to the backend
+    fetch("http://localhost:8080/api/customers", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(customerData),
+    })
+        .then((response) => {
+            if (response.ok) {
+                alert("Customer added successfully!");
+                location.reload(); // Reload the page to refresh the customer list
+            } else {
+                return response.json().then((errorData) => {
+                    throw new Error(errorData.message || "Failed to add customer");
+                });
+            }
+        })
+        .catch((error) => {
+            console.error("Error adding customer:", error);
+            alert(`Error adding customer: ${error.message}`);
+        });
+});
+

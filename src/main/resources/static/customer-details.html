@@ -22,10 +22,10 @@
         <select id="car" name="car" required></select>
         <br>
         <label for="rental-date">Rental Date:</label>
-        <input type="date" id="rental-date" name="rentalDate" required>
+        <input type="datetime-local" id="rental-date" name="rentalDate" required>
         <br>
-        <label for="return-date">Return Date:</label>
-        <input type="date" id="return-date" name="returnDate" required>
+        <label for="planned-return-date">Planned Return Date:</label>
+        <input type="datetime-local" id="planned-return-date" name="plannedReturnDate" required>
         <br>
         <button type="submit">Add Rental</button>
     </form>
@@ -36,16 +36,37 @@
         <tr>
             <th>Car</th>
             <th>Rental Date</th>
-            <th>Return Date</th>
+            <th>Planned Return Date</th>
+            <th>Actual Return Date</th>
+            <th>Return Condition</th>
             <th>Status</th>
             <th>Actions</th>
         </tr>
         </thead>
         <tbody></tbody>
     </table>
+
     <div class="navigation">
         <button onclick="navigateTo('index.html')">Back to Main Page</button>
         <button onclick="navigateTo('customers.html')">Back to Customers</button>
+    </div>
+</div>
+
+<div id="returnModal" class="modal">
+    <div class="modal-content">
+        <h3>Return Car</h3>
+        <form id="return-form">
+            <label for="return-condition">Condition on Return:</label>
+            <select id="return-condition" name="conditionOnReturn" required>
+                <option value="EXCELLENT">Excellent</option>
+                <option value="GOOD">Good</option>
+                <option value="DAMAGED">Damaged</option>
+                <option value="UNUSABLE">Unusable</option>
+            </select>
+            <br>
+            <button type="submit">Submit</button>
+            <button type="button" onclick="closeModal()">Cancel</button>
+        </form>
     </div>
 </div>
 
