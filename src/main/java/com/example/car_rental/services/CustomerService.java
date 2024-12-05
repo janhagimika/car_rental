@@ -1,13 +1,12 @@
 package com.example.car_rental.services;
 
-import com.example.car_rental.models.Car;
 import com.example.car_rental.models.Customer;
 import com.example.car_rental.repositories.CustomerRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class CustomerService {
@@ -21,7 +20,7 @@ public class CustomerService {
 
     public Customer getCustomerAndRentalHistory(Long id) {
         return customerRepository.findByIdWithRentals(id)
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
+                .orElseThrow(() -> new NoSuchElementException("Customer not found"));
     }
 
     public Customer saveCustomer(Customer customer) {

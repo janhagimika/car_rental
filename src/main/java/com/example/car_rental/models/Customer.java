@@ -1,17 +1,21 @@
 package com.example.car_rental.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.Data;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 
 import java.util.List;
 
 @Data
 @Entity
+@Table(
+        indexes = {
+                @Index(name = "idx_email_address", columnList = "emailAddress", unique = true)
+        }
+)
 public class Customer {
 
     @Id
@@ -29,7 +33,6 @@ public class Customer {
     @NotBlank(message = "Address is required")
     private String address;
 
-    @Column(unique = true)
     @Email(message = "Invalid email address")
     private String emailAddress;
 

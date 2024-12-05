@@ -5,7 +5,6 @@ import com.example.car_rental.services.CarService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,10 +17,10 @@ public class CarController {
     private CarService carService;
 
     @GetMapping
-    public List<Car> getAllCars() {
-        return carService.getAllCars();
+    public ResponseEntity<List<Car>> getAllCars() {
+        List<Car> cars = carService.getAllCars();
+        return ResponseEntity.ok(cars);
     }
-
     @GetMapping("/available")
     public ResponseEntity<List<Car>> getAvailableCars() {
         List<Car> availableCars = carService.getAvailableCars();
@@ -29,8 +28,9 @@ public class CarController {
     }
 
     @PostMapping
-    public Car saveCar(@Valid @RequestBody Car car) {
-        return carService.saveCar(car);
+    public ResponseEntity<Car> saveCar(@Valid @RequestBody Car car) {
+        Car savedCar = carService.saveCar(car);
+        return ResponseEntity.ok(savedCar);
     }
 
     @PutMapping("/{id}")

@@ -34,6 +34,6 @@ public class Car {
 
     @JsonIgnore
     @Version
-    private Integer version; // Optimistic locking version field
+    private Integer version;
 
 }

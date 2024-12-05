@@ -4,6 +4,7 @@ import com.example.car_rental.models.*;
 import com.example.car_rental.repositories.CarRepository;
 import com.example.car_rental.repositories.CustomerRepository;
 import com.example.car_rental.repositories.RentalRepository;
+import jakarta.persistence.OptimisticLockException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,55 +25,61 @@ public class RentalService {
     private CustomerRepository customerRepository;
     @Transactional
     public Rental createRental(Rental rental) {
-        Car car = carRepository.findById(rental.getCar().getId())
-                .orElseThrow(() -> new NoSuchElementException("Car not found with ID: " + rental.getCar().getId()));
+        try {
+            Car car = carRepository.findById(rental.getCar().getId())
+                    .orElseThrow(() -> new NoSuchElementException("Car not found with ID: " + rental.getCar().getId()));
 
-        if (!car.isAvailable()) {
-            throw new RuntimeException("Car is not available for rental");
+            if (!car.isAvailable()) {
+                throw new RuntimeException("Car is not available for rental");
+            }
+
+            Customer customer = customerRepository.findById(rental.getCustomer().getId())
+                    .orElseThrow(() -> new NoSuchElementException("Customer not found with ID: " + rental.getCustomer().getId()));
+
+            car.setAvailable(false);
+            carRepository.saveAndFlush(car);
+
+            rental.setCar(car);
+            rental.setCustomer(customer);
+            rental.setStatus(RentalStatus.PENDING);
+
+            return rentalRepository.save(rental);
+        } catch (OptimisticLockException e) {
+            throw new OptimisticLockException("Failed to update car availability due to concurrent modification", e);
         }
-
-        Customer customer = customerRepository.findById(rental.getCustomer().getId())
-                .orElseThrow(() -> new NoSuchElementException("Customer not found with ID: " + rental.getCustomer().getId()));
-
-        // Mark the car as unavailable
-        car.setAvailable(false);
-        carRepository.save(car);
-
-        // Update rental with managed entities
-        rental.setCar(car);
-        rental.setCustomer(customer);
-
-        rental.setStatus(RentalStatus.PENDING);
-        return rentalRepository.save(rental);
     }
 
 
     @Transactional
     public Rental completeRental(Long rentalId, ReturnCondition conditionOnReturn) {
-        Rental rental = rentalRepository.findById(rentalId)
-                .orElseThrow(() -> new NoSuchElementException("Rental not found"));
+        try {
+            Rental rental = rentalRepository.findById(rentalId)
+                    .orElseThrow(() -> new NoSuchElementException("Rental not found"));
 
-        if (rental.getCar() == null || rental.getCar().getId() == null) {
-            throw new IllegalArgumentException("Car information is missing");
-        }
-        if (rental.getCustomer() == null || rental.getCustomer().getId() == null) {
-            throw new IllegalArgumentException("Customer information is missing");
-        }
+            if (rental.getCar() == null || rental.getCar().getId() == null) {
+                throw new IllegalArgumentException("Car information is missing");
+            }
+            if (rental.getCustomer() == null || rental.getCustomer().getId() == null) {
+                throw new IllegalArgumentException("Customer information is missing");
+            }
 
-        // Update rental details
-        rental.setStatus(RentalStatus.COMPLETED); // Mark rental as completed
-        rental.setConditionOnReturn(ReturnCondition.valueOf(conditionOnReturn.name())); // Save the return condition as a string
-        rental.setReturnDate(LocalDateTime.now()); // Set actual return date
+            rental.setStatus(RentalStatus.COMPLETED);
+            rental.setConditionOnReturn(ReturnCondition.valueOf(conditionOnReturn.name()));
+            rental.setReturnDate(LocalDateTime.now());
 
-        // Mark the car as available (or not if unusable)
-        Car car = rental.getCar();
-        if(conditionOnReturn == ReturnCondition.UNUSABLE) {
-            car.setAvailable(false); // If unusable, car is no longer available
-        } else {
-            car.setAvailable(true); // Otherwise, mark the car as available
+            Car car = rental.getCar();
+            if (conditionOnReturn == ReturnCondition.UNUSABLE) {
+                car.setAvailable(false);
+            } else {
+                car.setAvailable(true);
+            }
+
+            carRepository.saveAndFlush(car);
+            return rentalRepository.saveAndFlush(rental);
+
+        } catch (OptimisticLockException e) {
+            throw new OptimisticLockException("Conflict detected while completing rental. Please try again.", e);
         }
-        carRepository.save(car); // Save car state
-        return rentalRepository.save(rental); // Save rental
     }
 
 
