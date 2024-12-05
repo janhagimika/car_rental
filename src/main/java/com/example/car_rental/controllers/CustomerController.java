@@ -4,6 +4,7 @@ import com.example.car_rental.mappers.CustomerMapper;
 import com.example.car_rental.models.Customer;
 import com.example.car_rental.models.CustomerDTO;
 import com.example.car_rental.services.CustomerService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +30,7 @@ public class CustomerController {
     }
 
     @PostMapping
-    public Customer saveCustomer(@RequestBody Customer customer) {
+    public Customer saveCustomer(@Valid @RequestBody Customer customer) {
         return customerService.saveCustomer(customer);
     }
 

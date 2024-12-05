@@ -34,11 +34,14 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("add-rental-form").addEventListener("submit", event => {
         event.preventDefault();
         const formData = new FormData(event.target);
+        const rentalDate = new Date(formData.get("rentalDate")).toISOString();
+        const plannedReturnDate = new Date(formData.get("plannedReturnDate")).toISOString();
+
         const rentalData = {
-            car: {id: formData.get("car")},
-            customer: {id: customerId},
-            plannedReturnDate: formData.get("plannedReturnDate"),
-            rentalDate: formData.get("rentalDate")
+            car: { id: formData.get("car") },
+            customer: { id: customerId },
+            rentalDate: rentalDate, // ISO formatted rentalDate
+            plannedReturnDate: plannedReturnDate, // ISO formatted plannedReturnDate
         };
 
         fetch("http://localhost:8080/api/rentals", {

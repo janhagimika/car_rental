@@ -1,8 +1,11 @@
 package com.example.car_rental.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -15,17 +18,21 @@ public class Rental {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "Car is required")
     @ManyToOne
     @JoinColumn(name = "car_id")
     private Car car;
 
+    @NotNull(message = "Customer is required")
     @ManyToOne
     @JoinColumn(name = "customer_id")
     @JsonBackReference
     private Customer customer;
 
+    @NotNull(message = "Rental date is required")
     private LocalDateTime rentalDate;
 
+    @Future(message = "Planned return date must be in the future")
     private LocalDateTime plannedReturnDate;
 
     private LocalDateTime returnDate;

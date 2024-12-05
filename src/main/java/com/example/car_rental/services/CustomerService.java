@@ -25,6 +25,9 @@ public class CustomerService {
     }
 
     public Customer saveCustomer(Customer customer) {
+        if (customerRepository.existsByEmailAddress(customer.getEmailAddress())) {
+            throw new IllegalArgumentException("Email address already in use");
+        }
         return customerRepository.save(customer);
     }
 

@@ -2,8 +2,10 @@ package com.example.car_rental.controllers;
 
 import com.example.car_rental.models.Car;
 import com.example.car_rental.services.CarService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,8 +27,9 @@ public class CarController {
         List<Car> availableCars = carService.getAvailableCars();
         return ResponseEntity.ok(availableCars);
     }
+    @Validated
     @PostMapping
-    public Car saveCar(@RequestBody Car car) {
+    public Car saveCar(@Valid @RequestBody Car car) {
         return carService.saveCar(car);
     }
 

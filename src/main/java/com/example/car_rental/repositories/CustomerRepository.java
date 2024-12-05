@@ -11,6 +11,8 @@ import java.util.Optional;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
+    boolean existsByEmailAddress(String emailAddress);
+
     @Query("SELECT c FROM Customer c LEFT JOIN FETCH c.rentalHistory WHERE c.id = :id")
     Optional<Customer> findByIdWithRentals(@Param("id") Long id);
 
