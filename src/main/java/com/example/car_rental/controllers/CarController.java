@@ -27,19 +27,21 @@ public class CarController {
         List<Car> availableCars = carService.getAvailableCars();
         return ResponseEntity.ok(availableCars);
     }
-    @Validated
+
     @PostMapping
     public Car saveCar(@Valid @RequestBody Car car) {
         return carService.saveCar(car);
     }
 
     @PutMapping("/{id}")
-    public Car updateCar(@PathVariable Long id, @RequestBody Car updatedCar) {
+    public Car updateCar(@PathVariable Long id, @Valid @RequestBody Car updatedCar) {
         return carService.updateCar(id, updatedCar);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteCar(@PathVariable Long id) {
+    public ResponseEntity<String> deleteCar(@PathVariable Long id) {
         carService.deleteCar(id);
+        return ResponseEntity.ok("Car deleted successfully!");
     }
+
 }

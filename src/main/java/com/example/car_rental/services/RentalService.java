@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.NoSuchElementException;
 
 @Service
 public class RentalService {
@@ -24,14 +25,14 @@ public class RentalService {
     @Transactional
     public Rental createRental(Rental rental) {
         Car car = carRepository.findById(rental.getCar().getId())
-                .orElseThrow(() -> new RuntimeException("Car not found"));
+                .orElseThrow(() -> new NoSuchElementException("Car not found with ID: " + rental.getCar().getId()));
 
         if (!car.isAvailable()) {
             throw new RuntimeException("Car is not available for rental");
         }
 
         Customer customer = customerRepository.findById(rental.getCustomer().getId())
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
+                .orElseThrow(() -> new NoSuchElementException("Customer not found with ID: " + rental.getCustomer().getId()));
 
         // Mark the car as unavailable
         car.setAvailable(false);
@@ -49,7 +50,7 @@ public class RentalService {
     @Transactional
     public Rental completeRental(Long rentalId, ReturnCondition conditionOnReturn) {
         Rental rental = rentalRepository.findById(rentalId)
-                .orElseThrow(() -> new RuntimeException("Rental not found"));
+                .orElseThrow(() -> new NoSuchElementException("Rental not found"));
 
         if (rental.getCar() == null || rental.getCar().getId() == null) {
             throw new IllegalArgumentException("Car information is missing");

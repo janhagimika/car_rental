@@ -1,3 +1,5 @@
+const apiBaseUrl = 'http://localhost:8080/api/customers';
+
 // Function to display the list of customers
 function displayCustomers(customers) {
     const customerList = document.getElementById("customer-list");
@@ -30,8 +32,8 @@ function displayCustomers(customers) {
 }
 
 // Fetch and display customers
-fetch("http://localhost:8080/api/customers")
-    .then((response) => response.json())
+fetch(apiBaseUrl)
+    .then(handleResponse) // Use the centralized error handler
     .then((customers) => displayCustomers(customers))
     .catch((error) => console.error("Error fetching customers:", error));
 
@@ -44,26 +46,17 @@ document.getElementById("add-customer-form").addEventListener("submit", (event) 
     const customerData = Object.fromEntries(formData.entries());
 
     // Send POST request to the backend
-    fetch("http://localhost:8080/api/customers", {
+    fetch(apiBaseUrl, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
         body: JSON.stringify(customerData),
     })
-        .then((response) => {
-            if (response.ok) {
-                alert("Customer added successfully!");
-                location.reload(); // Reload the page to refresh the customer list
-            } else {
-                return response.json().then((errorData) => {
-                    throw new Error(errorData.message || "Failed to add customer");
-                });
-            }
+        .then(handleResponse) // Use the centralized error handler
+        .then(() => {
+            alert("Customer added successfully!");
+            location.reload();
         })
-        .catch((error) => {
-            console.error("Error adding customer:", error);
-            alert(`Error adding customer: ${error.message}`);
-        });
+        .catch((error) => console.error("Error adding customer:", error));
 });
-

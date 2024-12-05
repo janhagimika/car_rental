@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Fetch customer details and rental history
     fetch(`http://localhost:8080/api/customers/${customerId}`)
-        .then(response => handleResponse(response))
+        .then(handleResponse) // Use centralized error handler
         .then(customer => {
             displayCustomerInfo(customer);
             displayRentalHistory(customer.rentalHistory);
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Populate cars dropdown
     fetch("http://localhost:8080/api/cars/available")
-        .then(response => handleResponse(response))
+        .then(handleResponse) // Use centralized error handler
         .then(cars => {
             populateCarDropdown(cars);
         })
@@ -46,10 +46,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         fetch("http://localhost:8080/api/rentals", {
             method: "POST",
-            headers: {"Content-Type": "application/json"},
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(rentalData),
         })
-            .then(response => handleResponse(response))
+            .then(handleResponse) // Use centralized error handler
             .then(() => {
                 alert("Rental added successfully");
                 location.reload();
@@ -63,7 +63,10 @@ function handleResponse(response) {
         return response.json();
     } else {
         return response.json().then(errorData => {
-            throw new Error(errorData.message || `Error: ${response.status}`);
+            const errorMessage = Object.values(errorData).join("\n") || `Error: ${response.status}`;
+            console.error("Error Details:", errorData);
+            alert(errorMessage);
+            throw new Error(errorMessage);
         });
     }
 }
@@ -97,7 +100,6 @@ function displayRentalHistory(rentals) {
     });
 }
 
-
 function populateCarDropdown(cars) {
     const carSelect = document.getElementById("car");
     carSelect.innerHTML = cars
@@ -112,20 +114,15 @@ document.getElementById("return-form").addEventListener("submit", event => {
 
     fetch(`http://localhost:8080/api/rentals/${currentRentalId}/return`, {
         method: "PUT",
-        headers: {"Content-Type": "application/json"},
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(conditionOnReturn),
     })
-        .then(response => {
-            if (response.ok) {
-                alert("Rental marked as returned");
-                location.reload();
-            } else {
-                response.text().then(error => console.error("Error:", error));
-                alert("Error completing rental");
-            }
+        .then(handleResponse) // Use centralized error handler
+        .then(() => {
+            alert("Rental marked as returned");
+            location.reload();
         })
         .catch(error => console.error("Error completing rental:", error));
-
 
     closeModal(); // Close the modal
 });
