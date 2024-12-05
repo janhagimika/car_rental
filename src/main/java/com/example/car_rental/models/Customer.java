@@ -23,11 +23,9 @@ public class Customer {
     private Long id;
 
     @NotBlank(message = "First name is required")
-    @Size(min = 2, max = 50, message = "First name must be between 2 and 50 characters")
     private String firstname;
 
     @NotBlank(message = "Surname is required")
-    @Size(min = 2, max = 50, message = "Surname must be between 2 and 50 characters")
     private String surname;
 
     @NotBlank(message = "Address is required")
