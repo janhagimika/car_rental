@@ -20,6 +20,9 @@ public class CarService {
     }
 
     public Car saveCar(Car car) {
+        if (car == null) {
+            throw new IllegalArgumentException("Car cannot be null");
+        }
         return carRepository.save(car);
     }
 
@@ -32,13 +35,21 @@ public class CarService {
     }
     @Transactional
     public Car updateCar(Long id, Car updatedCar) {
-        Car car = carRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Car not found!"));
-        car.setBrand(updatedCar.getBrand());
-        car.setModel(updatedCar.getModel());
-        car.setYearOfManufacture(updatedCar.getYearOfManufacture());
-        car.setColor(updatedCar.getColor());
-        car.setMileage(updatedCar.getMileage());
-        car.setAvailable(updatedCar.isAvailable());
-        return carRepository.save(car);
+        Car existingCar = carRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Car not found!"));
+
+        if (!existingCar.isAvailable()) {
+            throw new IllegalStateException("Car is not available for updates");
+        }
+
+        existingCar.setBrand(updatedCar.getBrand());
+        existingCar.setModel(updatedCar.getModel());
+        existingCar.setYearOfManufacture(updatedCar.getYearOfManufacture());
+        existingCar.setColor(updatedCar.getColor());
+        existingCar.setMileage(updatedCar.getMileage());
+        existingCar.setAvailable(updatedCar.isAvailable());
+
+        return carRepository.save(existingCar);
     }
+
 }

@@ -3,13 +3,16 @@ package com.example.car_rental.controllers;
 import com.example.car_rental.mappers.CustomerMapper;
 import com.example.car_rental.models.Customer;
 import com.example.car_rental.models.CustomerDTO;
+import com.example.car_rental.repositories.CustomerRepository;
 import com.example.car_rental.services.CustomerService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -29,6 +32,9 @@ class CustomerControllerTest {
 
     @Mock
     private CustomerService customerService;
+
+    @Mock
+    private CustomerRepository customerRepository;
 
     private Customer customer1;
     private Customer customer2;
@@ -50,6 +56,11 @@ class CustomerControllerTest {
         customer2.setEmailAddress("jane.doe@example.com");
         customer2.setAddress("456 Elm St");
         customer2.setPhoneNumber("987654321");
+    }
+
+    @AfterEach
+    void cleanup() {
+        customerRepository.deleteAll();
     }
 
     @Test
