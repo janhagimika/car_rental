@@ -4,7 +4,6 @@ import com.example.car_rental.models.*;
 import com.example.car_rental.repositories.CarRepository;
 import com.example.car_rental.repositories.CustomerRepository;
 import com.example.car_rental.repositories.RentalRepository;
-import jakarta.persistence.OptimisticLockException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +11,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 

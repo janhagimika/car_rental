@@ -6,17 +6,13 @@ import com.example.car_rental.models.Rental;
 import com.example.car_rental.repositories.CarRepository;
 import com.example.car_rental.repositories.CustomerRepository;
 import com.example.car_rental.repositories.RentalRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.CountDownLatch;
@@ -36,9 +32,6 @@ class RentalServiceAdvancedTest {
 
     @Autowired
     private CustomerRepository customerRepository;
-
-    @Autowired
-    private PlatformTransactionManager transactionManager;
 
     private Car car;
     private Customer customer;
