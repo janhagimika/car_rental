@@ -1,6 +1,5 @@
 package com.example.car_rental.controllers;
 
-import com.example.car_rental.mappers.CustomerMapper;
 import com.example.car_rental.models.Customer;
 import com.example.car_rental.models.CustomerDTO;
 import com.example.car_rental.repositories.CustomerRepository;
