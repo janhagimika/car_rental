@@ -7,6 +7,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Entity
 public class Car {
@@ -31,6 +33,10 @@ public class Car {
     private int mileage;
 
     private boolean isAvailable = true;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "car", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Rental> rentals;
 
     @JsonIgnore
     @Version

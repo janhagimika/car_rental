@@ -25,6 +25,10 @@ public class RentalService {
     private CustomerRepository customerRepository;
     @Transactional
     public Rental createRental(Rental rental) {
+
+        if (!rental.getPlannedReturnDate().isAfter(rental.getRentalDate())) {
+            throw new IllegalArgumentException("Planned return date must be after the rental date");
+        }
         try {
             Car car = carRepository.findById(rental.getCar().getId())
                     .orElseThrow(() -> new NoSuchElementException("Car not found with ID: " + rental.getCar().getId()));

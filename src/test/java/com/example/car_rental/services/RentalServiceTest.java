@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -53,6 +54,8 @@ class RentalServiceTest {
         rental.setCar(car);
         rental.setCustomer(customer);
         rental.setStatus(RentalStatus.PENDING);
+        rental.setRentalDate(LocalDateTime.now());
+        rental.setPlannedReturnDate(LocalDateTime.now().plusDays(2));
     }
 
     @AfterEach
@@ -96,6 +99,25 @@ class RentalServiceTest {
 
         verify(rentalRepository, never()).save(any());
     }
+
+    @Test
+    void testCreateRentalWithInvalidDates() {
+        // Arrange
+        rental.setPlannedReturnDate(LocalDateTime.now().minusDays(1)); // Invalid date
+
+        // Act & Assert
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> rentalService.createRental(rental)
+        );
+        assertEquals("Planned return date must be after the rental date", exception.getMessage());
+
+        // Verify that repositories are not accessed
+        verify(carRepository, never()).findById(anyLong());
+        verify(customerRepository, never()).findById(anyLong());
+        verify(rentalRepository, never()).save(any(Rental.class));
+    }
+
 
     @Test
     void testCreateRentalCustomerNotFound() {
