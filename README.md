@@ -42,10 +42,15 @@ http://localhost:8080/swagger-ui/index.html
     "available": true
   }
 DELETE /api/cars/{id}: Delete a car. Returns:
+
 "Car deleted successfully!"
+
 Customer Management Endpoints
+
 GET /api/customers: Retrieve all customers.
+
 POST /api/customers: Register a new customer. Requires:
+
 {
   "firstname": "John",
   "surname": "Doe",
@@ -53,15 +58,20 @@ POST /api/customers: Register a new customer. Requires:
   "phoneNumber": "123456789",
   "address": "123 Main St"
 }
+
 Rental Management Endpoints
+
 POST /api/rentals: Create a rental. Requires:
+
 {
   "car": { "id": 1 },
   "customer": { "id": 1 },
   "rentalDate": "2024-12-05T23:34:00.000Z",
   "plannedReturnDate": "2024-12-10T23:34:00.000Z"
 }
+
 PUT /api/rentals/{id}/return: Complete a rental. Requires:
+
 "conditionOnReturn": "GOOD"
 
 Running the Application
