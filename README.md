@@ -83,39 +83,23 @@ http://localhost:8080
 
 Setup Instructions
 
-Clone the repository:
+Clone the repository: git clone https://github.com/your-repo/car-rental-system.git
 
-git clone https://github.com/your-repo/car-rental-system.git
+Navigate to the project directory: cd car-rental-system
 
-Navigate to the project directory:
+Build the application: mvn clean install
 
-cd car-rental-system
-
-Build the application:
-
-mvn clean install
-
-Run the application:
-
-mvn spring-boot:run
+Run the application: mvn spring-boot:run
 
 Known Issues & Future Enhancements
 
-Pagination
+Pagination: For scalability, pagination can be implemented on list endpoints such as GET /api/cars and GET /api/customers.
 
-For scalability, pagination can be implemented on list endpoints such as GET /api/cars and GET /api/customers.
+Searching: Future updates could include search functionality for customers by name.
 
-Searching
+Database Warning: Tests use the same database as the application, and running tests will erase all data. Consider isolating the test database for production setups.
 
-Future updates could include search functionality for customers by name.
-
-Database Warning
-
-Tests use the same database as the application, and running tests will erase all data. Consider isolating the test database for production setups.
-
-Known Vulnerabilities
-
-The project depends on spring-beans:6.1.13 and spring-core:6.1.13, which have known vulnerabilities:
+Known Vulnerabilities: The project depends on spring-beans:6.1.13 and spring-core:6.1.13, which have known vulnerabilities:
 
 These issues are not exploitable in this project due to the following:
 
