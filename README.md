@@ -1,6 +1,6 @@
 # Car Rental System
 
-A backend system for managing car rentals, including vehicle inventory, customer management, and rental processing. Built using the Spring Framework with RESTful API architecture.
+A backend system for managing car rentals, including vehicle inventory, customer management, and rental processing. Built using the Spring Framework with RESTful API architecture. (Maven)
 
 ---
 
