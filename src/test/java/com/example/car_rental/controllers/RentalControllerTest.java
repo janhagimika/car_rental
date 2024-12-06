@@ -30,8 +30,6 @@ class RentalControllerTest {
     @Mock
     private RentalService rentalService;
 
-    private Customer customer;
-
     private Rental rental;
 
     @BeforeEach

@@ -88,22 +88,33 @@ class CarServiceTest {
 
     @Test
     void testDeleteCar() {
+        // Mocking `existsById` to return true for ID 1
+        when(carRepository.existsById(1L)).thenReturn(true);
         doNothing().when(carRepository).deleteById(1L);
 
+        // Act
         carService.deleteCar(1L);
 
+        // Verify interactions
+        verify(carRepository, times(1)).existsById(1L);
         verify(carRepository, times(1)).deleteById(1L);
     }
 
+
     @Test
     void testDeleteCarWhenNotFound() {
-        doThrow(new NoSuchElementException("Car not found with ID: 99")).when(carRepository).deleteById(99L);
+        // Mocking `existsById` to return false for ID 99
+        when(carRepository.existsById(99L)).thenReturn(false);
 
+        // Act and Assert
         Exception exception = assertThrows(NoSuchElementException.class, () -> carService.deleteCar(99L));
-        assertEquals("Car not found with ID: 99", exception.getMessage());
+        assertEquals("Car not found", exception.getMessage());
 
-        verify(carRepository, times(1)).deleteById(99L);
+        // Verify interactions
+        verify(carRepository, times(1)).existsById(99L);
+        verify(carRepository, never()).deleteById(anyLong());
     }
+
 
     @Test
     void testGetAvailableCars() {

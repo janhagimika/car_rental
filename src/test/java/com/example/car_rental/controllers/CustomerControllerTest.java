@@ -71,9 +71,6 @@ class CustomerControllerTest {
     void testGetAllCustomers() {
         // Arrange
         List<Customer> customers = Arrays.asList(customer1, customer2);
-        List<CustomerDTO> customerDTOs = customers.stream()
-                .map(CustomerMapper::toCustomerDTO)
-                .toList();
 
         when(customerService.getAllCustomers()).thenReturn(customers);
 
