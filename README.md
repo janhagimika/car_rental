@@ -104,18 +104,14 @@ Known Vulnerabilities: The project depends on spring-beans:6.1.13 and spring-cor
 These issues are not exploitable in this project due to the following:
 
 No case-sensitive comparisons for authorization are performed.
-
 This application is a demo/non-production system.
-
 For production, upgrading to 6.1.14 or higher is recommended.
 
 Notes on pom.xml
 
 Spring Boot Version: 3.3.4 was chosen to resolve compatibility with Swagger.
 
-Global Exception Handler
-
-All errors return a consistent JSON format:
+Global Exception Handler: All errors return a consistent JSON format:
 
 {
   "error": "Message describing the error"
