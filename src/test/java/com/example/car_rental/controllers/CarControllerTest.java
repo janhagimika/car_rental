@@ -10,11 +10,15 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -49,6 +53,8 @@ class CarControllerTest {
         car2.setColor("Black");
         car2.setMileage(20000);
         car2.setAvailable(true);
+        ServletRequestAttributes attributes = new ServletRequestAttributes(new MockHttpServletRequest());
+        RequestContextHolder.setRequestAttributes(attributes);
     }
 
     @Test
@@ -104,9 +110,12 @@ class CarControllerTest {
         ResponseEntity<Car> response = carController.saveCar(car1);
 
         // Assert
-        assertEquals(HttpStatus.OK.value(), response.getStatusCode().value());
+        assertEquals(HttpStatus.CREATED.value(), response.getStatusCode().value());
+        assertNotNull(response.getHeaders().getLocation(), "Location header should not be null");
         assertEquals("Toyota", response.getBody().getBrand());
     }
+
+
 
     @Test
     void testSaveCarWhenInvalid() {

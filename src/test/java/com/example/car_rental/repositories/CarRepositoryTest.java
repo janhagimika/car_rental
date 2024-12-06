@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +32,8 @@ class CarRepositoryTest {
         car.setAvailable(true);
         car.setMileage(50000);
         car.setYearOfManufacture(2018);
+        car.setRentals(new ArrayList<>()); // Ensure rentals is initialized
+
         car = carRepository.save(car); // Persist the car entity
     }
 

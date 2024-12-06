@@ -12,12 +12,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -53,6 +57,9 @@ class CustomerControllerTest {
         customer2.setEmailAddress("jane.doe@example.com");
         customer2.setAddress("456 Elm St");
         customer2.setPhoneNumber("987654321");
+
+        ServletRequestAttributes attributes = new ServletRequestAttributes(new MockHttpServletRequest());
+        RequestContextHolder.setRequestAttributes(attributes);
     }
 
     @AfterEach
@@ -110,13 +117,16 @@ class CustomerControllerTest {
         when(customerService.saveCustomer(any(Customer.class))).thenReturn(customer1);
 
         // Act
-        Customer response = customerController.saveCustomer(customer1);
+        ResponseEntity<Customer> response = customerController.saveCustomer(customer1);
 
         // Assert
-        assertEquals("John", response.getFirstname());
-        assertEquals("Doe", response.getSurname());
-        assertEquals("john.doe@example.com", response.getEmailAddress());
+        assertEquals(HttpStatus.CREATED.value(), response.getStatusCode().value());
+        assertNotNull(response.getHeaders().getLocation(), "Location header should not be null");
+        assertEquals("John", response.getBody().getFirstname());
+        assertEquals("Doe", response.getBody().getSurname());
+        assertEquals("john.doe@example.com", response.getBody().getEmailAddress());
     }
+
 
     @Test
     void testSaveCustomerWhenInvalid() {

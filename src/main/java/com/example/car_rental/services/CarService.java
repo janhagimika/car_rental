@@ -26,13 +26,18 @@ public class CarService {
         return carRepository.save(car);
     }
 
+    @Transactional
     public void deleteCar(Long id) {
+        if (!carRepository.existsById(id)) {
+            throw new NoSuchElementException("Car not found");
+        }
         carRepository.deleteById(id);
     }
 
     public List<Car> getAvailableCars() {
         return carRepository.findByIsAvailableTrue();
     }
+
     @Transactional
     public Car updateCar(Long id, Car updatedCar) {
         Car existingCar = carRepository.findById(id)

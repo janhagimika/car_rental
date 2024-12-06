@@ -10,10 +10,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -48,6 +52,9 @@ class RentalControllerTest {
         rental.setStatus(RentalStatus.PENDING);
         rental.setRentalDate(LocalDateTime.now());
         rental.setPlannedReturnDate(LocalDateTime.now().plusDays(3));
+
+        ServletRequestAttributes attributes = new ServletRequestAttributes(new MockHttpServletRequest());
+        RequestContextHolder.setRequestAttributes(attributes);
     }
 
     @Test
@@ -59,10 +66,13 @@ class RentalControllerTest {
         ResponseEntity<Rental> response = rentalController.createRental(rental);
 
         // Assert
-        assertEquals(HttpStatus.OK.value(), response.getStatusCode().value());
+        assertEquals(HttpStatus.CREATED.value(), response.getStatusCode().value());
+        assertNotNull(response.getHeaders().getLocation(), "Location header should not be null");
         assertEquals(1L, response.getBody().getId());
         assertEquals(RentalStatus.PENDING, response.getBody().getStatus());
     }
+
+
 
     @Test
     void testCreateRentalWhenInvalid() {
